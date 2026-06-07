@@ -3,8 +3,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SectionVideoBackground } from "@/components/autoelevate/section-video-background";
+import { SceneVideoBackground } from "@/components/autoelevate/scene-video-background";
 import { SiteImage } from "@/components/autoelevate/site-image";
 import { SITE_IMAGES } from "@/data/site-images";
+import { SITE_VIDEOS } from "@/data/site-videos";
 
 const TOTAL_SCENES = 5;
 
@@ -71,7 +74,7 @@ const SERVICE_ITEMS = [
     desc: "Cinematic, high-performance websites engineered to convert high-intent visitors. Built on Next.js with sub-1s load times and luxury aesthetics your clients expect.",
     tags: ["Next.js", "Animation", "CRO", "SEO"],
     image: SITE_IMAGES.services[0],
-    imageAlt: "Luxury automotive web design showcase",
+    imageAlt: "Luxury web design wireframe and digital layout system",
   },
   {
     num: "02",
@@ -79,7 +82,7 @@ const SERVICE_ITEMS = [
     desc: "Full brand systems — logo, typography, color, and visual language — calibrated to command premium positioning in a saturated market.",
     tags: ["Logo", "Brand System", "Style Guide"],
     image: SITE_IMAGES.services[1],
-    imageAlt: "Premium automotive brand identity",
+    imageAlt: "Premium automotive brand identity stationery and logo",
   },
   {
     num: "03",
@@ -87,7 +90,7 @@ const SERVICE_ITEMS = [
     desc: "End-to-end lead generation and nurturing pipelines: landing pages, follow-up sequences, booking funnels, and CRM integration tailored to luxury auto services.",
     tags: ["Lead Gen", "Funnels", "CRM", "Automation"],
     image: SITE_IMAGES.services[2],
-    imageAlt: "Automotive conversion funnel results",
+    imageAlt: "Lead conversion funnel analytics dashboard interface",
   },
   {
     num: "04",
@@ -95,7 +98,7 @@ const SERVICE_ITEMS = [
     desc: "Scroll-stopping social content, paid ad creatives, and video assets built with the visual authority that luxury automotive brands demand.",
     tags: ["Social Ads", "Video", "Content", "Paid Media"],
     image: SITE_IMAGES.services[3],
-    imageAlt: "Luxury automotive marketing creative",
+    imageAlt: "Luxury automotive social media ad creative on mobile",
   },
 ] as const;
 
@@ -105,7 +108,7 @@ const CASE_STUDIES = [
     title: "Complete Digital Rebrand + Conversion System",
     desc: "New identity, high-performance website, and a full paid ads funnel that tripled qualified bookings within 90 days.",
     image: SITE_IMAGES.caseStudies[0],
-    imageAlt: "Ceramic Pro Studio luxury vehicle detail",
+    imageAlt: "Matte black Lamborghini Urus professional ceramic coating detail",
     metrics: [
       { value: "340%", label: "Lead Increase" },
       { value: "$48k", label: "Monthly Revenue Added" },
@@ -118,7 +121,7 @@ const CASE_STUDIES = [
     title: "SEO-Driven Web Experience",
     desc: "Built an SEO-engineered website that captured dominant search real estate in a competitive market within 6 months.",
     image: SITE_IMAGES.caseStudies[1],
-    imageAlt: "PPF Elite paint protection project",
+    imageAlt: "Paint protection film application on luxury white vehicle",
     metrics: [
       { value: "+220%", label: "Organic Traffic" },
       { value: "#1", label: "Local SEO Ranking" },
@@ -130,7 +133,7 @@ const CASE_STUDIES = [
     title: "Brand Identity + Full Growth System",
     desc: "Ground-up brand identity paired with automated lead nurturing that delivered 5× revenue growth in under three months.",
     image: SITE_IMAGES.caseStudies[2],
-    imageAlt: "LuxTint Studio window tinting project",
+    imageAlt: "Blackout Tinting luxury garage with matte black Mercedes G-Wagon",
     metrics: [
       { value: "5.1×", label: "Revenue Multiplier" },
       { value: "12wk", label: "Time to Results" },
@@ -148,7 +151,6 @@ const AutoElevatePage = (): React.ReactElement => {
   const cursorDotRef = useRef<HTMLDivElement>(null);
   const cursorRingRef = useRef<HTMLDivElement>(null);
   const scrollSpacerRef = useRef<HTMLDivElement>(null);
-  const gridLinesRef = useRef<HTMLDivElement>(null);
   const analBarsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const codeColumns = useMemo(
@@ -257,7 +259,7 @@ const AutoElevatePage = (): React.ReactElement => {
     }
 
     const interactiveEls = document.querySelectorAll(
-      "a, button, .service-card, .case-card, .spec-card, .dot",
+      "a, button, .service-card, .case-card, .dot",
     );
     interactiveEls.forEach((el) => {
       el.addEventListener("mouseenter", onMouseEnterInteractive);
@@ -276,14 +278,6 @@ const AutoElevatePage = (): React.ReactElement => {
         );
       },
     });
-
-    const onScroll = (): void => {
-      if (gridLinesRef.current) {
-        gridLinesRef.current.style.transform = `perspective(900px) rotateX(22deg) translateY(${-20 + window.scrollY * 0.008}%)`;
-      }
-    };
-
-    window.addEventListener("scroll", onScroll);
 
     const onResize = (): void => {
       ScrollTrigger.refresh();
@@ -314,7 +308,6 @@ const AutoElevatePage = (): React.ReactElement => {
       document.body.classList.remove("has-custom-cursor");
       cancelAnimationFrame(rafId);
       document.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       interactiveEls.forEach((el) => {
         el.removeEventListener("mouseenter", onMouseEnterInteractive);
@@ -412,43 +405,17 @@ const AutoElevatePage = (): React.ReactElement => {
       <div id="scroll-spacer" ref={scrollSpacerRef}>
         <div id="cinematic-hero">
           <div className={`scene-canvas${activeScene === 0 ? " active" : ""}`} id="scene-0">
-            <SceneBackground
-              src={SITE_IMAGES.heroScenes[0]}
-              alt="Orange Porsche GT3 RS on coastal road"
-              priority
-            />
-            <div className="orb orb-1" />
-            <div className="orb orb-2" />
-            <div className="orb orb-3" />
-            <div className="grid-lines" ref={gridLinesRef} />
-            <div
-              className="shimmer-line"
-              style={{ top: "28%", animationDuration: "7s", animationDelay: "0s" }}
-            />
-            <div
-              className="shimmer-line"
-              style={{
-                top: "55%",
-                animationDuration: "9s",
-                animationDelay: "2s",
-                opacity: 0.6,
-              }}
-            />
-            <div
-              className="shimmer-line"
-              style={{
-                top: "72%",
-                animationDuration: "11s",
-                animationDelay: "4s",
-                opacity: 0.4,
-              }}
+            <SceneVideoBackground
+              src={SITE_VIDEOS.heroBackground}
+              poster={SITE_IMAGES.heroScenes[0]}
+              isActive={activeScene === 0}
             />
           </div>
 
           <div className={`scene-canvas${activeScene === 1 ? " active" : ""}`} id="scene-1">
             <SceneBackground
               src={SITE_IMAGES.heroScenes[1]}
-              alt="Silver Porsche at luxury estate"
+              alt="Luxury automotive strategy notebook and market analytics"
             />
             <div className="ui-grid">
               <div className="ui-card-float">
@@ -505,7 +472,7 @@ const AutoElevatePage = (): React.ReactElement => {
           <div className={`scene-canvas${activeScene === 2 ? " active" : ""}`} id="scene-2">
             <SceneBackground
               src={SITE_IMAGES.heroScenes[2]}
-              alt="Purple Porsche GT3 RS in forest setting"
+              alt="Luxury automotive website design on laptop screen"
             />
             <div className="mockup-frames">
               {SITE_IMAGES.designFrames.map((src, index) => (
@@ -523,7 +490,7 @@ const AutoElevatePage = (): React.ReactElement => {
           <div className={`scene-canvas${activeScene === 3 ? " active" : ""}`} id="scene-3">
             <SceneBackground
               src={SITE_IMAGES.devScene}
-              alt="Classic white Porsche in Paris at sunset"
+              alt="High-performance circuit board development technology"
             />
             <div className="code-rain">
               {codeColumns.map((col) => (
@@ -546,7 +513,7 @@ const AutoElevatePage = (): React.ReactElement => {
           <div className={`scene-canvas${activeScene === 4 ? " active" : ""}`} id="scene-4">
             <SceneBackground
               src={SITE_IMAGES.resultsScene}
-              alt="Classic red Porsche at scenic lake overlook"
+              alt="Performance hub dashboard showing revenue growth and conversion metrics"
             />
             <div className="analytics-bg">
               {ANALYTICS_HEIGHTS.map((h, i) => (
@@ -646,86 +613,81 @@ const AutoElevatePage = (): React.ReactElement => {
       </div>
 
       <section id="positioning" className="section">
-        <div className="pos-grid">
-          <div>
-            <p className="pos-eyebrow reveal">About AutoElevate</p>
-            <h2 className="pos-headline reveal">
-              The Agency Built
-              <br />
-              for <em>Automotive</em>
-              <br />
-              Luxury Brands
-            </h2>
-            <p className="pos-body reveal">
-              We don&apos;t serve everyone. We serve the most discerning sector in the
-              automotive world — luxury detailing, ceramic coating, PPF, and window tinting
-              studios that refuse to be ordinary. Our niche is your advantage.
-            </p>
-            <p className="pos-body reveal">
-              While generalist agencies dilute their expertise across dozens of industries,
-              every tool, template, and strategy we deploy has been refined exclusively in
-              the luxury automotive arena.
-            </p>
+        <SectionVideoBackground
+          src={SITE_VIDEOS.aboutBackground}
+          poster={SITE_IMAGES.positioning}
+        />
+        <div className="positioning-inner">
+          <div className="pos-grid">
+            <div className="pos-copy">
+              <p className="pos-eyebrow reveal">About AutoElevate</p>
+              <h2 className="pos-headline reveal">
+                The Agency Built
+                <br />
+                for <em>Automotive</em>
+                <br />
+                Luxury Brands
+              </h2>
+              <p className="pos-body reveal">
+                We don&apos;t serve everyone. We serve the most discerning sector in the
+                automotive world — luxury detailing, ceramic coating, PPF, and window tinting
+                studios that refuse to be ordinary. Our niche is your advantage.
+              </p>
+              <p className="pos-body reveal">
+                While generalist agencies dilute their expertise across dozens of industries,
+                every tool, template, and strategy we deploy has been refined exclusively in
+                the luxury automotive arena.
+              </p>
+            </div>
             <div className="pos-visual reveal">
               <SiteImage
                 src={SITE_IMAGES.positioning}
-                alt="Luxury automotive studio craftsmanship"
-                sizes="(max-width: 640px) 100vw, 600px"
+                alt="Professional ceramic coating application on a luxury black vehicle"
+                sizes="(max-width: 640px) 100vw, 340px"
               />
-            </div>
-          </div>
-          <div className="pos-right">
-            <div className="spec-card reveal">
-              <div className="spec-num">100%</div>
-              <div className="spec-label">Automotive Niche Focus</div>
-            </div>
-            <div className="spec-card reveal">
-              <div className="spec-num">4× Avg</div>
-              <div className="spec-label">Revenue Growth for Clients</div>
-            </div>
-            <div className="spec-card reveal">
-              <div className="spec-num">72hr</div>
-              <div className="spec-label">Project Onboarding Turnaround</div>
-            </div>
-            <div className="spec-card reveal">
-              <div className="spec-num">48+</div>
-              <div className="spec-label">Luxury Auto Brands Elevated</div>
+              <div className="pos-visual-overlay" aria-hidden="true" />
             </div>
           </div>
         </div>
       </section>
 
       <section id="services" className="section">
-        <div className="section-header">
-          <p className="section-eyebrow reveal">What We Do</p>
-          <h2 className="section-title reveal">
-            Services Built for
-            <br />
-            <em>Premium</em> Brands
-          </h2>
-        </div>
-        <div className="services-grid">
-          {SERVICE_ITEMS.map((service) => (
-            <div className="service-card reveal" key={service.num}>
-              <div className="service-num">{service.num}</div>
-              <div className="service-visual">
-                <SiteImage
-                  src={service.image}
-                  alt={service.imageAlt}
-                  sizes="(max-width: 640px) 100vw, 600px"
-                />
+        <SectionVideoBackground
+          src={SITE_VIDEOS.servicesBackground}
+          poster={SITE_IMAGES.services[0]}
+        />
+        <div className="services-inner">
+          <div className="section-header">
+            <p className="section-eyebrow reveal">What We Do</p>
+            <h2 className="section-title reveal">
+              Services Built for
+              <br />
+              <em>Premium</em> Brands
+            </h2>
+          </div>
+          <div className="services-grid">
+            {SERVICE_ITEMS.map((service) => (
+              <div className="service-card reveal" key={service.num}>
+                <div className="service-num">{service.num}</div>
+                <div className="service-visual">
+                  <SiteImage
+                    src={service.image}
+                    alt={service.imageAlt}
+                    sizes="(max-width: 640px) 100vw, 600px"
+                  />
+                </div>
+                <h3 className="service-name">{service.name}</h3>
+                <p className="service-desc">{service.desc}</p>
+                <div className="service-tags">
+                  {service.tags.map((tag) => (
+                    <span className="tag" key={tag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <h3 className="service-name">{service.name}</h3>
-              <p className="service-desc">{service.desc}</p>
-              <div className="service-tags">
-                {service.tags.map((tag) => (
-                  <span className="tag" key={tag}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
@@ -790,7 +752,7 @@ const AutoElevatePage = (): React.ReactElement => {
             <div className="contact-visual reveal">
               <SiteImage
                 src={SITE_IMAGES.contact}
-                alt="Luxury automotive client consultation"
+                alt="Lexus luxury key fob representing premium automotive partnership"
                 sizes="(max-width: 640px) 100vw, 600px"
               />
             </div>

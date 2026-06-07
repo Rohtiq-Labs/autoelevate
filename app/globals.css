@@ -365,6 +365,21 @@ nav::after {
   z-index: 0;
 }
 
+.scene-bg-video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--black);
+}
+
+.scene-bg-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
 .scene-bg-image img {
   object-position: center 35%;
 }
@@ -378,6 +393,19 @@ nav::after {
     rgba(10, 10, 10, 0.55) 0%,
     rgba(10, 10, 10, 0.72) 45%,
     rgba(10, 10, 10, 0.88) 100%
+  );
+}
+
+#scene-0 .scene-bg-video video {
+  object-position: center center;
+}
+
+#scene-0 .scene-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.35) 0%,
+    rgba(10, 10, 10, 0.55) 50%,
+    rgba(10, 10, 10, 0.82) 100%
   );
 }
 
@@ -456,9 +484,61 @@ nav::after {
   }
 }
 
+#scene-1 .scene-bg-image img {
+  object-position: center center;
+}
+
+#scene-1 .scene-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.4) 0%,
+    rgba(10, 10, 10, 0.62) 50%,
+    rgba(10, 10, 10, 0.85) 100%
+  );
+}
+
 #scene-1,
+#scene-2 .scene-bg-image img {
+  object-position: center center;
+}
+
+#scene-2 .scene-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.38) 0%,
+    rgba(10, 10, 10, 0.6) 50%,
+    rgba(10, 10, 10, 0.86) 100%
+  );
+}
+
 #scene-2,
+#scene-3 .scene-bg-image img {
+  object-position: center center;
+}
+
+#scene-3 .scene-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.42) 0%,
+    rgba(10, 10, 10, 0.65) 50%,
+    rgba(10, 10, 10, 0.88) 100%
+  );
+}
+
 #scene-3,
+#scene-4 .scene-bg-image img {
+  object-position: center center;
+}
+
+#scene-4 .scene-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.4) 0%,
+    rgba(10, 10, 10, 0.62) 50%,
+    rgba(10, 10, 10, 0.86) 100%
+  );
+}
+
 #scene-4 {
   background: var(--black);
 }
@@ -723,16 +803,38 @@ nav::after {
   padding: var(--section-y) var(--section-x);
   background: var(--deep);
   overflow: hidden;
+  position: relative;
+  isolation: isolate;
 }
 
-#positioning::before {
+#positioning .section-video-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(17, 17, 17, 0.86) 0%,
+    rgba(17, 17, 17, 0.72) 50%,
+    rgba(17, 17, 17, 0.9) 100%
+  );
+}
+
+.positioning-inner {
+  position: relative;
+  z-index: 2;
+}
+
+#positioning .pos-grid {
+  position: relative;
+  z-index: 2;
+}
+
+#positioning .pos-grid::before {
   content: "";
   position: absolute;
-  top: 0;
+  top: calc(-1 * var(--section-y));
   left: 0;
   right: 0;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--border-l), transparent);
+  pointer-events: none;
 }
 
 .pos-grid {
@@ -747,13 +849,24 @@ nav::after {
 .pos-visual {
   position: relative;
   width: 100%;
-  height: clamp(220px, 55vw, 420px);
+  height: clamp(260px, 58vw, 420px);
   border: 1px solid var(--border);
   overflow: hidden;
 }
 
 .pos-visual img {
-  object-position: center;
+  object-position: center 40%;
+}
+
+.pos-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 40%,
+    rgba(10, 10, 10, 0.35) 100%
+  );
+  pointer-events: none;
 }
 
 .pos-eyebrow {
@@ -842,6 +955,40 @@ nav::after {
 #services {
   padding: clamp(72px, 12vw, 140px) var(--section-x);
   background: var(--black);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.section-video-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.section-video-bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.section-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.88) 0%,
+    rgba(10, 10, 10, 0.78) 45%,
+    rgba(10, 10, 10, 0.92) 100%
+  );
+}
+
+.services-inner {
+  position: relative;
+  z-index: 2;
 }
 
 .section-header {
@@ -1198,7 +1345,7 @@ nav::after {
 }
 
 .contact-visual img {
-  object-position: center 40%;
+  object-position: center center;
 }
 
 .cta-eyebrow {
@@ -1592,7 +1739,14 @@ body::after {
   }
 
   .pos-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr minmax(280px, 420px);
+    gap: clamp(48px, 6vw, 88px);
+    align-items: center;
+  }
+
+  .pos-visual {
+    height: clamp(320px, 36vw, 480px);
+    min-height: auto;
   }
 
   .services-grid {
@@ -1667,7 +1821,6 @@ body::after {
 
   body.has-custom-cursor .service-card,
   body.has-custom-cursor .case-card,
-  body.has-custom-cursor .spec-card,
   body.has-custom-cursor .dot {
     cursor: none;
   }
