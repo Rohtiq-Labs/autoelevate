@@ -1,4 +1,4 @@
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://autoelevate.rl";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://autoelevate.rohtiqlabs.com/";
 
 export const SITE_CONFIG = {
   url: siteUrl,
