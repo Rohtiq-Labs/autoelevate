@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { BrandMarquee } from "@/components/autoelevate/brand-marquee";
 import { SectionVideoBackground } from "@/components/autoelevate/section-video-background";
 import { SceneVideoBackground } from "@/components/autoelevate/scene-video-background";
 import { SiteImage } from "@/components/autoelevate/site-image";
@@ -417,56 +418,6 @@ const AutoElevatePage = (): React.ReactElement => {
               src={SITE_IMAGES.heroScenes[1]}
               alt="Luxury automotive strategy notebook and market analytics"
             />
-            <div className="ui-grid">
-              <div className="ui-card-float">
-                <div className="card-thumb">
-                  <SiteImage
-                    src={SITE_IMAGES.strategyCards[0]}
-                    alt="Strategy analytics preview"
-                    sizes="190px"
-                  />
-                </div>
-                <div className="card-label">Strategy Score</div>
-                <div className="card-num">94</div>
-                <div className="card-bar accent" style={{ width: "94%" }} />
-              </div>
-              <div className="ui-card-float">
-                <div className="card-thumb">
-                  <SiteImage
-                    src={SITE_IMAGES.strategyCards[1]}
-                    alt="Lead quality dashboard preview"
-                    sizes="240px"
-                  />
-                </div>
-                <div className="card-label">Lead Quality</div>
-                <div className="card-bar accent" />
-                <div className="card-bar" style={{ width: "70%" }} />
-                <div className="card-bar accent" style={{ width: "85%" }} />
-              </div>
-              <div className="ui-card-float">
-                <div className="card-thumb">
-                  <SiteImage
-                    src={SITE_IMAGES.strategyCards[2]}
-                    alt="Funnel ROI performance preview"
-                    sizes="170px"
-                  />
-                </div>
-                <div className="card-label">Funnel ROI</div>
-                <div className="card-num">3.8×</div>
-              </div>
-              <div className="ui-card-float">
-                <div className="card-thumb">
-                  <SiteImage
-                    src={SITE_IMAGES.strategyCards[3]}
-                    alt="Market fit analysis preview"
-                    sizes="210px"
-                  />
-                </div>
-                <div className="card-label">Market Fit</div>
-                <div className="card-bar accent" style={{ width: "88%" }} />
-                <div className="card-bar" style={{ width: "60%" }} />
-              </div>
-            </div>
           </div>
 
           <div className={`scene-canvas${activeScene === 2 ? " active" : ""}`} id="scene-2">
@@ -474,17 +425,6 @@ const AutoElevatePage = (): React.ReactElement => {
               src={SITE_IMAGES.heroScenes[2]}
               alt="Luxury automotive website design on laptop screen"
             />
-            <div className="mockup-frames">
-              {SITE_IMAGES.designFrames.map((src, index) => (
-                <div className="mock-frame" key={src}>
-                  <SiteImage
-                    src={src}
-                    alt={`Luxury automotive design mockup ${index + 1}`}
-                    sizes="(max-width: 640px) 100vw, 360px"
-                  />
-                </div>
-              ))}
-            </div>
           </div>
 
           <div className={`scene-canvas${activeScene === 3 ? " active" : ""}`} id="scene-3">
@@ -611,6 +551,8 @@ const AutoElevatePage = (): React.ReactElement => {
           </div>
         </div>
       </div>
+
+      <BrandMarquee />
 
       <section id="positioning" className="section">
         <SectionVideoBackground

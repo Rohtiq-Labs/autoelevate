@@ -15,5 +15,13 @@ export const SiteImage = ({
   className = "object-cover",
   sizes = "(max-width: 640px) 100vw, 50vw",
 }: SiteImageProps): React.ReactElement => (
-  <Image src={src} alt={alt} fill className={className} sizes={sizes} priority={priority} />
+  <Image
+    src={src}
+    alt={alt}
+    fill
+    className={className}
+    sizes={sizes}
+    priority={priority}
+    style={{ objectFit: "cover" }}
+  />
 );
