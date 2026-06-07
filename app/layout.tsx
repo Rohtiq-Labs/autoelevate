@@ -25,24 +25,30 @@ const spaceMono = Space_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
+  applicationName: SITE_CONFIG.displayName,
   title: {
     default: SITE_CONFIG.defaultTitle,
-    template: `%s | ${SITE_CONFIG.name}`,
+    template: `%s | ${SITE_CONFIG.displayName}`,
   },
   description: SITE_CONFIG.defaultDescription,
   keywords: [...SITE_CONFIG.keywords],
-  authors: [{ name: SITE_CONFIG.name, url: SITE_CONFIG.url }],
-  creator: SITE_CONFIG.parentOrganization.name,
-  publisher: SITE_CONFIG.parentOrganization.name,
+  authors: [{ name: SITE_CONFIG.displayName, url: SITE_CONFIG.url }],
+  creator: SITE_CONFIG.displayName,
+  publisher: SITE_CONFIG.displayName,
   category: "Digital Marketing",
   alternates: {
     canonical: "/",
+  },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/apple-icon.svg", type: "image/svg+xml", sizes: "180x180" }],
+    shortcut: ["/icon.svg"],
   },
   openGraph: {
     type: "website",
     locale: SITE_CONFIG.locale,
     url: SITE_CONFIG.url,
-    siteName: SITE_CONFIG.name,
+    siteName: SITE_CONFIG.displayName,
     title: SITE_CONFIG.defaultTitle,
     description: SITE_CONFIG.defaultDescription,
     images: [

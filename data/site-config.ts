@@ -3,6 +3,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://autoelevate.rohtiql
 export const SITE_CONFIG = {
   url: siteUrl,
   name: "AutoElevate",
+  displayName: "Auto Elevate",
   legalName: "AutoElevate",
   brandOf: "Rohtiq Labs",
   tagline: "Luxury Automotive Digital Agency",
