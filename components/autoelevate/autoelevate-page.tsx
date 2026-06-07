@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AmbientLayer } from "@/components/autoelevate/ambient-layer";
 import { BrandMarquee } from "@/components/autoelevate/brand-marquee";
+import { FaqSection } from "@/components/autoelevate/faq-section";
 import { ScrollProgress } from "@/components/autoelevate/scroll-progress";
 import { SectionVideoBackground } from "@/components/autoelevate/section-video-background";
 import { SceneVideoBackground } from "@/components/autoelevate/scene-video-background";
@@ -355,10 +356,16 @@ const AutoElevatePage = (): React.ReactElement => {
         </div>
         <ul className="nav-links">
           <li>
+            <a href="#about">About</a>
+          </li>
+          <li>
             <a href="#services">Services</a>
           </li>
           <li>
             <a href="#work">Work</a>
+          </li>
+          <li>
+            <a href="#faq">FAQ</a>
           </li>
           <li>
             <a href="#contact">Contact</a>
@@ -386,11 +393,17 @@ const AutoElevatePage = (): React.ReactElement => {
         className={`nav-mobile-panel${navOpen ? " open" : ""}`}
         aria-hidden={!navOpen}
       >
+        <a href="#about" onClick={handleNavLinkClick}>
+          About
+        </a>
         <a href="#services" onClick={handleNavLinkClick}>
           Services
         </a>
         <a href="#work" onClick={handleNavLinkClick}>
           Work
+        </a>
+        <a href="#faq" onClick={handleNavLinkClick}>
+          FAQ
         </a>
         <a href="#contact" onClick={handleNavLinkClick}>
           Contact
@@ -417,6 +430,7 @@ const AutoElevatePage = (): React.ReactElement => {
         ))}
       </div>
 
+      <main id="main-content">
       <div id="scroll-spacer" ref={scrollSpacerRef}>
         <div id="cinematic-hero" className={loaderHidden ? "hero-ready" : "hero-locked"}>
           <div className="hero-frame hero-frame-tl" aria-hidden="true" />
@@ -575,10 +589,11 @@ const AutoElevatePage = (): React.ReactElement => {
 
       <StatementBand />
 
-      <section id="positioning" className="section">
+      <section id="about" className="section">
         <SectionVideoBackground
           src={SITE_VIDEOS.aboutBackground}
           poster={SITE_IMAGES.positioning}
+          priority={2}
         />
         <div className="positioning-inner">
           <div className="pos-grid">
@@ -599,7 +614,9 @@ const AutoElevatePage = (): React.ReactElement => {
               <p className="pos-body reveal">
                 While generalist agencies dilute their expertise across dozens of industries,
                 every tool, template, and strategy we deploy has been refined exclusively in
-                the luxury automotive arena.
+                the luxury automotive arena. Explore our{" "}
+                <a href="#services">automotive digital services</a> or review{" "}
+                <a href="#work">client results</a>.
               </p>
             </div>
             <div className="pos-visual reveal">
@@ -618,6 +635,7 @@ const AutoElevatePage = (): React.ReactElement => {
         <SectionVideoBackground
           src={SITE_VIDEOS.servicesBackground}
           poster={SITE_IMAGES.services[0]}
+          priority={1}
         />
         <div className="services-inner">
           <div className="section-header">
@@ -639,7 +657,9 @@ const AutoElevatePage = (): React.ReactElement => {
                     sizes="(max-width: 640px) 100vw, 600px"
                   />
                 </div>
-                <h3 className="service-name">{service.name}</h3>
+                <h3 className="service-name">
+                  <a href="#contact">{service.name}</a>
+                </h3>
                 <p className="service-desc">{service.desc}</p>
                 <div className="service-tags">
                   {service.tags.map((tag) => (
@@ -701,11 +721,13 @@ const AutoElevatePage = (): React.ReactElement => {
         </div>
       </section>
 
+      <FaqSection />
+
       <section id="contact" className="section">
         <div className="section-image-bg" aria-hidden="true">
           <SiteImage
             src={SITE_IMAGES.contact}
-            alt=""
+            alt="Luxury automotive studio interior with premium detailing bay lighting"
             sizes="100vw"
           />
           <div className="section-video-overlay" />
@@ -720,8 +742,8 @@ const AutoElevatePage = (): React.ReactElement => {
             </h2>
             <p className="cta-sub reveal">
               We take on a limited number of new clients each quarter. If you&apos;re serious
-              about transforming your luxury automotive business, let&apos;s start the
-              conversation.
+              about transforming your luxury automotive business, review our{" "}
+              <a href="#faq">FAQ</a>, then start the conversation.
             </p>
             <a
               href="https://wa.me/923239675581"
@@ -802,6 +824,7 @@ const AutoElevatePage = (): React.ReactElement => {
           </div>
         </div>
       </section>
+      </main>
 
       <footer>
         <div className="footer-logo">
@@ -820,6 +843,11 @@ const AutoElevatePage = (): React.ReactElement => {
           . All rights reserved.
         </p>
         <div className="footer-socials">
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#work">Work</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contact">Contact</a>
           <a
             href="https://www.instagram.com/autoelevate.rl/"
             target="_blank"

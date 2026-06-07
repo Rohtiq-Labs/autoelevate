@@ -592,15 +592,25 @@ nav::after {
   position: relative;
   z-index: 3;
   padding: clamp(72px, 12vw, 140px) var(--section-x);
-  background:
-    radial-gradient(ellipse 60% 80% at 50% 0%, var(--glow), transparent 60%),
-    var(--black);
+  background: var(--black);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   overflow: hidden;
+  isolation: isolate;
+}
+
+.statement-band .section-video-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.82) 0%,
+    rgba(10, 10, 10, 0.68) 50%,
+    rgba(10, 10, 10, 0.85) 100%
+  );
 }
 
 .statement-band-inner {
+  position: relative;
+  z-index: 2;
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
@@ -613,6 +623,7 @@ nav::after {
   text-transform: uppercase;
   color: var(--champagne);
   margin-bottom: 28px;
+  font-weight: inherit;
 }
 
 .statement-quote {
@@ -1115,7 +1126,7 @@ nav::after {
   z-index: 5;
 }
 
-#positioning {
+#about {
   padding: var(--section-y) var(--section-x);
   background: var(--deep);
   overflow: hidden;
@@ -1123,7 +1134,7 @@ nav::after {
   isolation: isolate;
 }
 
-#positioning .section-video-overlay {
+#about .section-video-overlay {
   background: linear-gradient(
     180deg,
     rgba(17, 17, 17, 0.86) 0%,
@@ -1137,12 +1148,12 @@ nav::after {
   z-index: 2;
 }
 
-#positioning .pos-grid {
+#about .pos-grid {
   position: relative;
   z-index: 2;
 }
 
-#positioning .pos-grid::before {
+#about .pos-grid::before {
   content: "";
   position: absolute;
   top: calc(-1 * var(--section-y));
@@ -1925,6 +1936,90 @@ footer {
   color: var(--champagne);
 }
 
+.faq-section {
+  padding: var(--section-y) var(--section-x);
+  background: var(--black);
+}
+
+.faq-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.faq-inner .section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.faq-intro {
+  max-width: 680px;
+  margin: 24px auto 0;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--muted);
+  text-align: center;
+}
+
+.faq-list {
+  border-bottom: 1px solid var(--border);
+}
+
+.faq-item {
+  border-top: 1px solid var(--border);
+}
+
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 24px 0;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-question {
+  font-family: var(--font-display), serif;
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--white);
+}
+
+.faq-answer {
+  padding: 0 0 28px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.service-name a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.service-name a:hover {
+  color: var(--champagne);
+}
+
+.pos-body a,
+.cta-sub a,
+.faq-intro a,
+.faq-answer a {
+  color: var(--champagne);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  transition: color 0.3s;
+}
+
+.pos-body a:hover,
+.cta-sub a:hover,
+.faq-intro a:hover,
+.faq-answer a:hover {
+  color: var(--white);
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(36px);
@@ -2313,8 +2408,14 @@ body::after {
 
   footer {
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
     text-align: left;
+  }
+
+  .footer-socials {
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   body.has-custom-cursor .service-card,

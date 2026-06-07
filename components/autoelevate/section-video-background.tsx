@@ -1,53 +1,35 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useManagedVideo } from "@/lib/use-managed-video";
 
 type SectionVideoBackgroundProps = {
   src: string;
   poster?: string;
+  priority?: number;
 };
 
 export const SectionVideoBackground = ({
   src,
   poster,
+  priority = 0,
 }: SectionVideoBackgroundProps): React.ReactElement => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    const video = videoRef.current;
-    if (!container || !video) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            void video.play().catch(() => undefined);
-            return;
-          }
-          video.pause();
-        });
-      },
-      { threshold: 0.15 },
-    );
-
-    observer.observe(container);
-
-    return () => observer.disconnect();
-  }, []);
+  const { containerRef, setVideoRef, videoSrc, preload } = useManagedVideo({
+    src,
+    lazy: true,
+    priority,
+  });
 
   return (
     <div className="section-video-bg" ref={containerRef} aria-hidden="true">
       <video
-        ref={videoRef}
-        src={src}
+        ref={setVideoRef}
+        src={videoSrc}
         poster={poster}
         autoPlay
         muted
         loop
         playsInline
-        preload="metadata"
+        preload={preload}
       />
       <div className="section-video-overlay" />
     </div>

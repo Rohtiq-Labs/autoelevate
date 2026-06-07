@@ -1,44 +1,39 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useManagedVideo } from "@/lib/use-managed-video";
 
 type SceneVideoBackgroundProps = {
   src: string;
   poster: string;
   isActive: boolean;
+  priority?: number;
 };
 
 export const SceneVideoBackground = ({
   src,
   poster,
   isActive,
+  priority = 10,
 }: SceneVideoBackgroundProps): React.ReactElement => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (isActive) {
-      void video.play().catch(() => undefined);
-      return;
-    }
-
-    video.pause();
-  }, [isActive]);
+  const { containerRef, setVideoRef, videoSrc, preload } = useManagedVideo({
+    src,
+    lazy: false,
+    priority,
+    isActive,
+  });
 
   return (
     <>
-      <div className="scene-bg-video">
+      <div className="scene-bg-video" ref={containerRef}>
         <video
-          ref={videoRef}
-          src={src}
+          ref={setVideoRef}
+          src={videoSrc}
           poster={poster}
           autoPlay
           muted
           loop
           playsInline
-          preload="auto"
+          preload={preload}
           aria-hidden="true"
         />
       </div>
