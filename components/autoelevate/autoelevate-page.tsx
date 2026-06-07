@@ -842,12 +842,14 @@ const AutoElevatePage = (): React.ReactElement => {
           </a>
           . All rights reserved.
         </p>
-        <div className="footer-socials">
+        <div className="footer-nav">
           <a href="#about">About</a>
           <a href="#services">Services</a>
           <a href="#work">Work</a>
           <a href="#faq">FAQ</a>
           <a href="#contact">Contact</a>
+        </div>
+        <div className="footer-socials">
           <a
             href="https://www.instagram.com/autoelevate.rl/"
             target="_blank"

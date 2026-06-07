@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Space_Mono, Syne } from "next/font/google";
 
 import { SITE_CONFIG } from "@/data/site-config";
@@ -74,6 +74,12 @@ export const metadata: Metadata = {
   verification: {
     // google: "YOUR_GOOGLE_SEARCH_CONSOLE_VERIFICATION_ID",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

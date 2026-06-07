@@ -31,6 +31,8 @@
 
 html {
   scroll-behavior: auto;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
@@ -38,7 +40,16 @@ body {
   color: var(--white);
   font-family: var(--font-ui), sans-serif;
   overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
   cursor: auto;
+}
+
+main {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 img[data-nimg="fill"] {
@@ -480,6 +491,9 @@ nav::after {
 #scroll-spacer {
   height: 320vh;
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .brand-marquee {
@@ -1124,6 +1138,9 @@ nav::after {
 .section {
   position: relative;
   z-index: 5;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 #about {
@@ -1510,6 +1527,7 @@ nav::after {
 #work {
   padding: clamp(72px, 12vw, 140px) var(--section-x);
   background: var(--deep);
+  overflow-x: clip;
 }
 
 .cases-grid {
@@ -1731,6 +1749,8 @@ nav::after {
   align-items: start;
   position: relative;
   z-index: 2;
+  width: 100%;
+  min-width: 0;
 }
 
 .cta-eyebrow {
@@ -1793,6 +1813,9 @@ nav::after {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .form-group {
@@ -1821,6 +1844,9 @@ nav::after {
   outline: none;
   border-radius: 0;
   appearance: none;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   transition:
     border-color 0.3s,
     background 0.3s;
@@ -1884,6 +1910,19 @@ footer {
   justify-content: center;
   gap: 20px;
   text-align: center;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.footer-nav,
+.footer-socials {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 16px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .footer-logo {
@@ -1904,6 +1943,9 @@ footer {
   font-size: 9px;
   color: var(--white);
   letter-spacing: 0.1em;
+  max-width: 100%;
+  line-height: 1.7;
+  padding: 0 4px;
 }
 
 .footer-brand-link {
@@ -1918,10 +1960,10 @@ footer {
 }
 
 .footer-socials {
-  display: flex;
-  gap: 24px;
+  gap: 12px 16px;
 }
 
+.footer-nav a,
 .footer-socials a {
   font-family: var(--font-mono), monospace;
   font-size: 9px;
@@ -1932,6 +1974,7 @@ footer {
   transition: color 0.3s;
 }
 
+.footer-nav a:hover,
 .footer-socials a:hover {
   color: var(--champagne);
 }
@@ -2080,6 +2123,81 @@ body::after {
 }
 
 @media (max-width: 640px) {
+  nav {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  .nav-logo {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    max-width: calc(100vw - 88px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .scene-eyebrow {
+    letter-spacing: 0.18em;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .scene-eyebrow::before,
+  .scene-eyebrow::after {
+    width: 20px;
+  }
+
+  .scene-headline {
+    font-size: clamp(28px, 9vw, 42px);
+    margin-bottom: 18px;
+  }
+
+  .scene-sub {
+    font-size: 14px;
+    max-width: 100%;
+    padding: 0 4px;
+  }
+
+  .scene-dots {
+    bottom: 72px;
+    gap: 10px;
+  }
+
+  .section-title,
+  .pos-headline,
+  .cta-headline,
+  .statement-quote {
+    overflow-wrap: anywhere;
+  }
+
+  .cta-headline {
+    font-size: clamp(36px, 10vw, 52px);
+  }
+
+  .submit-btn {
+    width: 100%;
+    align-self: stretch;
+    text-align: center;
+  }
+
+  .whatsapp-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .footer-nav a,
+  .footer-socials a {
+    font-size: 8px;
+    letter-spacing: 0.12em;
+  }
+
+  #services .services-inner {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
   #services .section-header {
     text-align: left;
     margin-bottom: 36px;
@@ -2094,7 +2212,9 @@ body::after {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding-bottom: 10px;
-    max-width: none;
+    width: 100%;
+    max-width: 100%;
+    overscroll-behavior-x: contain;
   }
 
   .services-grid::-webkit-scrollbar {
@@ -2410,11 +2530,18 @@ body::after {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
     text-align: left;
+    gap: 24px;
   }
 
+  .footer-copy {
+    flex: 1 1 240px;
+  }
+
+  .footer-nav,
   .footer-socials {
-    flex-wrap: wrap;
+    flex: 1 1 auto;
     justify-content: flex-end;
   }
 
