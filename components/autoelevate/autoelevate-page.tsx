@@ -3,12 +3,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { AmbientLayer } from "@/components/autoelevate/ambient-layer";
 import { BrandMarquee } from "@/components/autoelevate/brand-marquee";
+import { ScrollProgress } from "@/components/autoelevate/scroll-progress";
 import { SectionVideoBackground } from "@/components/autoelevate/section-video-background";
 import { SceneVideoBackground } from "@/components/autoelevate/scene-video-background";
 import { SiteImage } from "@/components/autoelevate/site-image";
+import { StatementBand } from "@/components/autoelevate/statement-band";
 import { SITE_IMAGES } from "@/data/site-images";
 import { SITE_VIDEOS } from "@/data/site-videos";
+import {
+  animateLoaderExit,
+  animateSceneText,
+  initPremiumMotion,
+} from "@/lib/premium-motion";
 
 const TOTAL_SCENES = 5;
 
@@ -145,6 +153,7 @@ const CASE_STUDIES = [
 
 const AutoElevatePage = (): React.ReactElement => {
   const [loaderHidden, setLoaderHidden] = useState(false);
+  const [loaderExiting, setLoaderExiting] = useState(false);
   const [activeScene, setActiveScene] = useState(0);
   const [submitLabel, setSubmitLabel] = useState("Submit Inquiry →");
   const [navOpen, setNavOpen] = useState(false);
@@ -214,7 +223,10 @@ const AutoElevatePage = (): React.ReactElement => {
     applyCursorMode();
     finePointer.addEventListener("change", applyCursorMode);
 
-    const loaderTimer = window.setTimeout(() => setLoaderHidden(true), 2400);
+    const loaderTimer = window.setTimeout(() => {
+      setLoaderExiting(true);
+      animateLoaderExit(() => setLoaderHidden(true));
+    }, 2400);
 
     let mx = 0;
     let my = 0;
@@ -285,25 +297,12 @@ const AutoElevatePage = (): React.ReactElement => {
     };
     window.addEventListener("resize", onResize);
 
-    const revealObs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const el = entry.target as HTMLElement;
-          const siblings = [...el.parentElement!.querySelectorAll(".reveal")];
-          window.setTimeout(
-            () => el.classList.add("visible"),
-            siblings.indexOf(el) * 85,
-          );
-          revealObs.unobserve(el);
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -60px 0px" },
-    );
-
-    document.querySelectorAll(".reveal").forEach((el) => revealObs.observe(el));
+    const cleanupMotion = initPremiumMotion({
+      scrollSpacer: scrollSpacerRef.current,
+    });
 
     return () => {
+      cleanupMotion();
       window.clearTimeout(loaderTimer);
       finePointer.removeEventListener("change", applyCursorMode);
       document.body.classList.remove("has-custom-cursor");
@@ -315,14 +314,29 @@ const AutoElevatePage = (): React.ReactElement => {
         el.removeEventListener("mouseleave", onMouseLeaveInteractive);
       });
       scrollTrigger.kill();
-      revealObs.disconnect();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, [activateScene]);
 
+  useEffect(() => {
+    if (!loaderHidden) return;
+    animateSceneText(activeScene);
+  }, [activeScene, loaderHidden]);
+
+  useEffect(() => {
+    if (!loaderHidden) return;
+    animateSceneText(0);
+  }, [loaderHidden]);
+
   return (
     <>
-      <div id="loader" className={loaderHidden ? "hidden" : ""}>
+      <AmbientLayer />
+      <ScrollProgress />
+
+      <div
+        id="loader"
+        className={`${loaderHidden ? "hidden" : ""}${loaderExiting ? " exiting" : ""}`}
+      >
         <div className="loader-logo">
           Auto<span>Elevate</span>
         </div>
@@ -404,7 +418,12 @@ const AutoElevatePage = (): React.ReactElement => {
       </div>
 
       <div id="scroll-spacer" ref={scrollSpacerRef}>
-        <div id="cinematic-hero">
+        <div id="cinematic-hero" className={loaderHidden ? "hero-ready" : "hero-locked"}>
+          <div className="hero-frame hero-frame-tl" aria-hidden="true" />
+          <div className="hero-frame hero-frame-tr" aria-hidden="true" />
+          <div className="hero-frame hero-frame-bl" aria-hidden="true" />
+          <div className="hero-frame hero-frame-br" aria-hidden="true" />
+          <div className="hero-shimmer" aria-hidden="true" />
           <div className={`scene-canvas${activeScene === 0 ? " active" : ""}`} id="scene-0">
             <SceneVideoBackground
               src={SITE_VIDEOS.heroBackground}
@@ -554,6 +573,8 @@ const AutoElevatePage = (): React.ReactElement => {
 
       <BrandMarquee />
 
+      <StatementBand />
+
       <section id="positioning" className="section">
         <SectionVideoBackground
           src={SITE_VIDEOS.aboutBackground}
@@ -609,7 +630,7 @@ const AutoElevatePage = (): React.ReactElement => {
           </div>
           <div className="services-grid">
             {SERVICE_ITEMS.map((service) => (
-              <div className="service-card reveal" key={service.num}>
+              <div className="service-card" key={service.num}>
                 <div className="service-num">{service.num}</div>
                 <div className="service-visual">
                   <SiteImage
@@ -644,7 +665,7 @@ const AutoElevatePage = (): React.ReactElement => {
         </div>
         <div className="cases-grid">
           {CASE_STUDIES.map((study) => (
-            <div className="case-card reveal" key={study.client}>
+            <div className="case-card" key={study.client}>
               <div className="case-visual">
                 <div className="case-bg">
                   <SiteImage
@@ -655,19 +676,11 @@ const AutoElevatePage = (): React.ReactElement => {
                   <div className="case-bg-overlay" aria-hidden="true" />
                 </div>
                 <div
-                  className="case-metrics"
-                  style={
-                    study.stacked
-                      ? { flexDirection: "column", gap: "18px" }
-                      : undefined
-                  }
+                  className={`case-metrics${study.stacked ? " case-metrics-stacked" : ""}`}
                 >
                   {study.metrics.map((metric) => (
                     <div className="metric" key={metric.label}>
-                      <div
-                        className="metric-num"
-                        style={study.stacked ? { fontSize: "50px" } : undefined}
-                      >
+                      <div className="metric-num">
                         <span>{metric.value}</span>
                       </div>
                       <div className="metric-label">{metric.label}</div>
@@ -689,15 +702,16 @@ const AutoElevatePage = (): React.ReactElement => {
       </section>
 
       <section id="contact" className="section">
+        <div className="section-image-bg" aria-hidden="true">
+          <SiteImage
+            src={SITE_IMAGES.contact}
+            alt=""
+            sizes="100vw"
+          />
+          <div className="section-video-overlay" />
+        </div>
         <div className="cta-grid">
           <div className="cta-left">
-            <div className="contact-visual reveal">
-              <SiteImage
-                src={SITE_IMAGES.contact}
-                alt="Lexus luxury key fob representing premium automotive partnership"
-                sizes="(max-width: 640px) 100vw, 600px"
-              />
-            </div>
             <p className="cta-eyebrow reveal">Ready to Grow?</p>
             <h2 className="cta-headline reveal">
               Let&apos;s <em>Elevate</em>
@@ -710,7 +724,7 @@ const AutoElevatePage = (): React.ReactElement => {
               conversation.
             </p>
             <a
-              href="https://wa.me/1234567890"
+              href="https://wa.me/923239675581"
               className="whatsapp-btn reveal"
               target="_blank"
               rel="noopener noreferrer"
@@ -789,29 +803,31 @@ const AutoElevatePage = (): React.ReactElement => {
         </div>
       </section>
 
-      <section className="gallery-section" aria-label="Automotive portfolio gallery">
-        <div className="gallery-track">
-          {[...SITE_IMAGES.gallery, ...SITE_IMAGES.gallery].map((src, index) => (
-            <div className="gallery-item" key={`${src}-${index}`}>
-              <SiteImage
-                src={src}
-                alt={`Luxury automotive portfolio image ${(index % SITE_IMAGES.gallery.length) + 1}`}
-                sizes="320px"
-              />
-            </div>
-          ))}
-        </div>
-      </section>
-
       <footer>
         <div className="footer-logo">
           Auto<span>Elevate</span>
         </div>
-        <p className="footer-copy">© 2025 AutoElevate. All rights reserved.</p>
+        <p className="footer-copy">
+          © 2026 AutoElevate, a brand of{" "}
+          <a
+            className="footer-brand-link"
+            href="https://www.rohtiqlabs.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Rohtiq Labs
+          </a>
+          . All rights reserved.
+        </p>
         <div className="footer-socials">
-          <a href="#">Instagram</a>
+          <a
+            href="https://www.instagram.com/autoelevate.rl/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Instagram
+          </a>
           <a href="#">LinkedIn</a>
-          <a href="#">Behance</a>
         </div>
       </footer>
     </>
