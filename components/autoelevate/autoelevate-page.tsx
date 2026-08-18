@@ -1,16 +1,19 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AmbientLayer } from "@/components/autoelevate/ambient-layer";
 import { BrandMarquee } from "@/components/autoelevate/brand-marquee";
-import { FaqSection } from "@/components/autoelevate/faq-section";
+import { CtaSection } from "@/components/autoelevate/cta-section";
 import { ScrollProgress } from "@/components/autoelevate/scroll-progress";
-import { SectionVideoBackground } from "@/components/autoelevate/section-video-background";
 import { SceneVideoBackground } from "@/components/autoelevate/scene-video-background";
+import { ServicesSection } from "@/components/autoelevate/services-section";
 import { SiteImage } from "@/components/autoelevate/site-image";
-import { StatementBand } from "@/components/autoelevate/statement-band";
+import { TestimonialsSection } from "@/components/autoelevate/testimonials-section";
+import { WorkSection } from "@/components/autoelevate/work-section";
+import { WhyAutoElevateSection } from "@/components/autoelevate/why-autoelevate-section";
 import { SITE_IMAGES } from "@/data/site-images";
 import { SITE_VIDEOS } from "@/data/site-videos";
 import {
@@ -46,18 +49,6 @@ const ANALYTICS_HEIGHTS = [
   32, 48, 62, 40, 78, 57, 90, 72, 95, 68, 80, 96, 85, 70, 76, 62, 88, 92, 79, 90,
 ];
 
-const CaseArrowIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-    <path
-      d="M3 8h10M9 4l4 4-4 4"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 type SceneBackgroundProps = {
   src: string;
   alt: string;
@@ -77,86 +68,10 @@ const SceneBackground = ({
   </>
 );
 
-const SERVICE_ITEMS = [
-  {
-    num: "01",
-    name: "Web Design & Development",
-    desc: "Cinematic, high-performance websites engineered to convert high-intent visitors. Built on Next.js with sub-1s load times and luxury aesthetics your clients expect.",
-    tags: ["Next.js", "Animation", "CRO", "SEO"],
-    image: SITE_IMAGES.services[0],
-    imageAlt: "Luxury web design wireframe and digital layout system",
-  },
-  {
-    num: "02",
-    name: "Brand Identity",
-    desc: "Full brand systems — logo, typography, color, and visual language — calibrated to command premium positioning in a saturated market.",
-    tags: ["Logo", "Brand System", "Style Guide"],
-    image: SITE_IMAGES.services[1],
-    imageAlt: "Premium automotive brand identity stationery and logo",
-  },
-  {
-    num: "03",
-    name: "Conversion Systems",
-    desc: "End-to-end lead generation and nurturing pipelines: landing pages, follow-up sequences, booking funnels, and CRM integration tailored to luxury auto services.",
-    tags: ["Lead Gen", "Funnels", "CRM", "Automation"],
-    image: SITE_IMAGES.services[2],
-    imageAlt: "Lead conversion funnel analytics dashboard interface",
-  },
-  {
-    num: "04",
-    name: "Marketing Creatives",
-    desc: "Scroll-stopping social content, paid ad creatives, and video assets built with the visual authority that luxury automotive brands demand.",
-    tags: ["Social Ads", "Video", "Content", "Paid Media"],
-    image: SITE_IMAGES.services[3],
-    imageAlt: "Luxury automotive social media ad creative on mobile",
-  },
-] as const;
-
-const CASE_STUDIES = [
-  {
-    client: "Ceramic Pro Studio — Dubai",
-    title: "Complete Digital Rebrand + Conversion System",
-    desc: "New identity, high-performance website, and a full paid ads funnel that tripled qualified bookings within 90 days.",
-    image: SITE_IMAGES.caseStudies[0],
-    imageAlt: "Matte black Lamborghini Urus professional ceramic coating detail",
-    metrics: [
-      { value: "340%", label: "Lead Increase" },
-      { value: "$48k", label: "Monthly Revenue Added" },
-      { value: "4.2×", label: "ROAS on Paid Ads" },
-    ],
-    stacked: false,
-  },
-  {
-    client: "PPF Elite — Karachi",
-    title: "SEO-Driven Web Experience",
-    desc: "Built an SEO-engineered website that captured dominant search real estate in a competitive market within 6 months.",
-    image: SITE_IMAGES.caseStudies[1],
-    imageAlt: "Paint protection film application on luxury white vehicle",
-    metrics: [
-      { value: "+220%", label: "Organic Traffic" },
-      { value: "#1", label: "Local SEO Ranking" },
-    ],
-    stacked: true,
-  },
-  {
-    client: "LuxTint Studio — Lahore",
-    title: "Brand Identity + Full Growth System",
-    desc: "Ground-up brand identity paired with automated lead nurturing that delivered 5× revenue growth in under three months.",
-    image: SITE_IMAGES.caseStudies[2],
-    imageAlt: "Blackout Tinting luxury garage with matte black Mercedes G-Wagon",
-    metrics: [
-      { value: "5.1×", label: "Revenue Multiplier" },
-      { value: "12wk", label: "Time to Results" },
-    ],
-    stacked: true,
-  },
-] as const;
-
 const AutoElevatePage = (): React.ReactElement => {
   const [loaderHidden, setLoaderHidden] = useState(false);
   const [loaderExiting, setLoaderExiting] = useState(false);
   const [activeScene, setActiveScene] = useState(0);
-  const [submitLabel, setSubmitLabel] = useState("Submit Inquiry →");
   const [navOpen, setNavOpen] = useState(false);
 
   const cursorDotRef = useRef<HTMLDivElement>(null);
@@ -195,11 +110,6 @@ const AutoElevatePage = (): React.ReactElement => {
       return index;
     });
   }, []);
-
-  const handleSubmit = (): void => {
-    setSubmitLabel("✓ Message Received");
-    setTimeout(() => setSubmitLabel("Submit Inquiry →"), 3000);
-  };
 
   const handleDotClick = (index: number): void => {
     const spacer = scrollSpacerRef.current;
@@ -273,7 +183,7 @@ const AutoElevatePage = (): React.ReactElement => {
     }
 
     const interactiveEls = document.querySelectorAll(
-      "a, button, .service-card, .case-card, .dot",
+      "a, button, .work-stage, .dot",
     );
     interactiveEls.forEach((el) => {
       el.addEventListener("mouseenter", onMouseEnterInteractive);
@@ -351,13 +261,16 @@ const AutoElevatePage = (): React.ReactElement => {
       <div className="cursor-ring" ref={cursorRingRef} />
 
       <nav>
-        <div className="nav-logo">
-          Auto<span>Elevate</span>
-        </div>
+        <a className="nav-logo" href="#cinematic-hero" aria-label="AutoElevate home">
+          <Image
+            src="/assets/logo/logo.png"
+            alt="AutoElevate"
+            width={669}
+            height={373}
+            priority
+          />
+        </a>
         <ul className="nav-links">
-          <li>
-            <a href="#about">About</a>
-          </li>
           <li>
             <a href="#services">Services</a>
           </li>
@@ -365,13 +278,13 @@ const AutoElevatePage = (): React.ReactElement => {
             <a href="#work">Work</a>
           </li>
           <li>
-            <a href="#faq">FAQ</a>
+            <a href="#testimonials">Testimonials</a>
           </li>
           <li>
-            <a href="#contact">Contact</a>
+            <a href="#about">About</a>
           </li>
         </ul>
-        <a href="#contact" className="nav-cta">
+        <a href="#cta" className="nav-cta">
           Start Project
         </a>
         <button
@@ -393,22 +306,19 @@ const AutoElevatePage = (): React.ReactElement => {
         className={`nav-mobile-panel${navOpen ? " open" : ""}`}
         aria-hidden={!navOpen}
       >
-        <a href="#about" onClick={handleNavLinkClick}>
-          About
-        </a>
         <a href="#services" onClick={handleNavLinkClick}>
           Services
         </a>
         <a href="#work" onClick={handleNavLinkClick}>
           Work
         </a>
-        <a href="#faq" onClick={handleNavLinkClick}>
-          FAQ
+        <a href="#testimonials" onClick={handleNavLinkClick}>
+          Testimonials
         </a>
-        <a href="#contact" onClick={handleNavLinkClick}>
-          Contact
+        <a href="#about" onClick={handleNavLinkClick}>
+          About
         </a>
-        <a href="#contact" className="nav-cta" onClick={handleNavLinkClick}>
+        <a href="#cta" className="nav-cta" onClick={handleNavLinkClick}>
           Start Project
         </a>
       </div>
@@ -587,249 +497,26 @@ const AutoElevatePage = (): React.ReactElement => {
 
       <BrandMarquee />
 
-      <StatementBand />
+      <ServicesSection />
 
-      <section id="about" className="section">
-        <SectionVideoBackground
-          src={SITE_VIDEOS.aboutBackground}
-          poster={SITE_IMAGES.positioning}
-          priority={2}
-        />
-        <div className="positioning-inner">
-          <div className="pos-grid">
-            <div className="pos-copy">
-              <p className="pos-eyebrow reveal">About AutoElevate</p>
-              <h2 className="pos-headline reveal">
-                The Agency Built
-                <br />
-                for <em>Automotive</em>
-                <br />
-                Luxury Brands
-              </h2>
-              <p className="pos-body reveal">
-                We don&apos;t serve everyone. We serve the most discerning sector in the
-                automotive world — luxury detailing, ceramic coating, PPF, and window tinting
-                studios that refuse to be ordinary. Our niche is your advantage.
-              </p>
-              <p className="pos-body reveal">
-                While generalist agencies dilute their expertise across dozens of industries,
-                every tool, template, and strategy we deploy has been refined exclusively in
-                the luxury automotive arena. Explore our{" "}
-                <a href="#services">automotive digital services</a> or review{" "}
-                <a href="#work">client results</a>.
-              </p>
-            </div>
-            <div className="pos-visual reveal">
-              <SiteImage
-                src={SITE_IMAGES.positioning}
-                alt="Professional ceramic coating application on a luxury black vehicle"
-                sizes="(max-width: 640px) 100vw, 340px"
-              />
-              <div className="pos-visual-overlay" aria-hidden="true" />
-            </div>
-          </div>
-        </div>
-      </section>
+      <WorkSection />
 
-      <section id="services" className="section">
-        <SectionVideoBackground
-          src={SITE_VIDEOS.servicesBackground}
-          poster={SITE_IMAGES.services[0]}
-          priority={1}
-        />
-        <div className="services-inner">
-          <div className="section-header">
-            <p className="section-eyebrow reveal">What We Do</p>
-            <h2 className="section-title reveal">
-              Services Built for
-              <br />
-              <em>Premium</em> Brands
-            </h2>
-          </div>
-          <div className="services-grid">
-            {SERVICE_ITEMS.map((service) => (
-              <div className="service-card" key={service.num}>
-                <div className="service-num">{service.num}</div>
-                <div className="service-visual">
-                  <SiteImage
-                    src={service.image}
-                    alt={service.imageAlt}
-                    sizes="(max-width: 640px) 100vw, 600px"
-                  />
-                </div>
-                <h3 className="service-name">
-                  <a href="#contact">{service.name}</a>
-                </h3>
-                <p className="service-desc">{service.desc}</p>
-                <div className="service-tags">
-                  {service.tags.map((tag) => (
-                    <span className="tag" key={tag}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestimonialsSection />
 
-      <section id="work" className="section">
-        <div className="section-header">
-          <p className="section-eyebrow reveal">Case Studies</p>
-          <h2 className="section-title reveal">
-            Brands We&apos;ve
-            <br />
-            <em>Transformed</em>
-          </h2>
-        </div>
-        <div className="cases-grid">
-          {CASE_STUDIES.map((study) => (
-            <div className="case-card" key={study.client}>
-              <div className="case-visual">
-                <div className="case-bg">
-                  <SiteImage
-                    src={study.image}
-                    alt={study.imageAlt}
-                    sizes="(max-width: 640px) 100vw, 800px"
-                  />
-                  <div className="case-bg-overlay" aria-hidden="true" />
-                </div>
-                <div
-                  className={`case-metrics${study.stacked ? " case-metrics-stacked" : ""}`}
-                >
-                  {study.metrics.map((metric) => (
-                    <div className="metric" key={metric.label}>
-                      <div className="metric-num">
-                        <span>{metric.value}</span>
-                      </div>
-                      <div className="metric-label">{metric.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="case-info">
-                <p className="case-client">{study.client}</p>
-                <h3 className="case-title">{study.title}</h3>
-                <p className="case-desc">{study.desc}</p>
-                <div className="case-arrow">
-                  <CaseArrowIcon />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <WhyAutoElevateSection />
 
-      <FaqSection />
-
-      <section id="contact" className="section">
-        <div className="section-image-bg" aria-hidden="true">
-          <SiteImage
-            src={SITE_IMAGES.contact}
-            alt="Luxury automotive studio interior with premium detailing bay lighting"
-            sizes="100vw"
-          />
-          <div className="section-video-overlay" />
-        </div>
-        <div className="cta-grid">
-          <div className="cta-left">
-            <p className="cta-eyebrow reveal">Ready to Grow?</p>
-            <h2 className="cta-headline reveal">
-              Let&apos;s <em>Elevate</em>
-              <br />
-              Your Brand
-            </h2>
-            <p className="cta-sub reveal">
-              We take on a limited number of new clients each quarter. If you&apos;re serious
-              about transforming your luxury automotive business, review our{" "}
-              <a href="#faq">FAQ</a>, then start the conversation.
-            </p>
-            <a
-              href="https://wa.me/923239675581"
-              className="whatsapp-btn reveal"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-              </svg>
-              Chat on WhatsApp
-            </a>
-          </div>
-
-          <div className="cta-form reveal">
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label" htmlFor="first-name">
-                  First Name
-                </label>
-                <input className="form-input" id="first-name" type="text" placeholder="Ahmad" />
-              </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="last-name">
-                  Last Name
-                </label>
-                <input className="form-input" id="last-name" type="text" placeholder="Khan" />
-              </div>
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="business-name">
-                Business Name
-              </label>
-              <input
-                className="form-input"
-                id="business-name"
-                type="text"
-                placeholder="Your Studio Name"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="email">
-                Email
-              </label>
-              <input
-                className="form-input"
-                id="email"
-                type="email"
-                placeholder="you@studio.com"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="service">
-                Service Needed
-              </label>
-              <select className="form-select" id="service" defaultValue="">
-                <option value="">Select a service...</option>
-                <option>Web Design & Development</option>
-                <option>Brand Identity</option>
-                <option>Conversion Systems</option>
-                <option>Marketing Creatives</option>
-                <option>Full Growth Package</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="goals">
-                Tell Us About Your Goals
-              </label>
-              <textarea
-                className="form-textarea"
-                id="goals"
-                placeholder="What does success look like for your brand in 12 months?"
-              />
-            </div>
-            <button className="submit-btn" type="button" onClick={handleSubmit}>
-              {submitLabel}
-            </button>
-          </div>
-        </div>
-      </section>
+      <CtaSection />
       </main>
 
       <footer>
-        <div className="footer-logo">
-          Auto<span>Elevate</span>
-        </div>
+        <a className="footer-logo" href="#cinematic-hero" aria-label="AutoElevate home">
+          <Image
+            src="/assets/logo/logo.png"
+            alt="AutoElevate"
+            width={669}
+            height={373}
+          />
+        </a>
         <p className="footer-copy">
           © 2026 AutoElevate, a brand of{" "}
           <a
@@ -843,11 +530,11 @@ const AutoElevatePage = (): React.ReactElement => {
           . All rights reserved.
         </p>
         <div className="footer-nav">
-          <a href="#about">About</a>
           <a href="#services">Services</a>
           <a href="#work">Work</a>
-          <a href="#faq">FAQ</a>
-          <a href="#contact">Contact</a>
+          <a href="#testimonials">Testimonials</a>
+          <a href="#about">About</a>
+          <a href="#cta">Start Project</a>
         </div>
         <div className="footer-socials">
           <a

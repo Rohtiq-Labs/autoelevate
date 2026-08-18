@@ -15,6 +15,14 @@ export const initPremiumMotion = ({
 }: PremiumMotionOptions): (() => void) => {
   if (prefersReducedMotion()) {
     document.querySelectorAll(".reveal").forEach((el) => el.classList.add("visible"));
+    document
+      .querySelectorAll<HTMLElement>(
+        ".why-ae-label, .why-ae-support, .why-ae-visual, .why-ae-base, .why-ae-line span",
+      )
+      .forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
     return () => undefined;
   }
 
@@ -108,103 +116,81 @@ export const initPremiumMotion = ({
     cleanups.push(() => trigger.kill());
   });
 
-  const statementBand = document.querySelector<HTMLElement>(".statement-band");
-  if (statementBand) {
-    const trigger = ScrollTrigger.create({
-      trigger: statementBand,
-      start: "top 75%",
+  const whySection = document.querySelector<HTMLElement>("#about.why-ae");
+  if (whySection) {
+    const label = whySection.querySelector<HTMLElement>(".why-ae-label");
+    const lines = whySection.querySelectorAll<HTMLElement>(".why-ae-line span");
+    const support = whySection.querySelector<HTMLElement>(".why-ae-support");
+    const visual = whySection.querySelector<HTMLElement>(".why-ae-visual");
+    const base = whySection.querySelector<HTMLElement>(".why-ae-base");
+
+    const whyTrigger = ScrollTrigger.create({
+      trigger: whySection,
+      start: "top 78%",
       once: true,
       onEnter: () => {
-        gsap.fromTo(
-          statementBand.querySelectorAll(".statement-piece"),
-          { y: 60, opacity: 0, filter: "blur(10px)" },
-          {
-            y: 0,
-            opacity: 1,
-            filter: "blur(0px)",
-            duration: 1.2,
-            stagger: 0.18,
-            ease: "power3.out",
-          },
-        );
-        gsap.fromTo(
-          statementBand.querySelector(".statement-line"),
-          { scaleX: 0 },
-          { scaleX: 1, duration: 1.4, ease: "power2.inOut", delay: 0.4 },
-        );
+        if (label) {
+          gsap.fromTo(
+            label,
+            { y: 12, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
+          );
+        }
+        if (lines.length) {
+          gsap.fromTo(
+            lines,
+            { y: "108%" },
+            { y: "0%", duration: 1.05, stagger: 0.1, ease: "power3.out", delay: 0.08 },
+          );
+        }
+        if (support) {
+          gsap.fromTo(
+            support,
+            { y: 16, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.9, delay: 0.28, ease: "power2.out" },
+          );
+        }
+        if (visual) {
+          gsap.fromTo(
+            visual,
+            { y: 28, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.15, delay: 0.16, ease: "power3.out" },
+          );
+        }
+        if (base) {
+          gsap.fromTo(
+            base,
+            { y: 12, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.85, delay: 0.38, ease: "power2.out" },
+          );
+        }
       },
     });
-    cleanups.push(() => trigger.kill());
+    cleanups.push(() => whyTrigger.kill());
   }
 
-  const posVisual = document.querySelector<HTMLElement>(".pos-visual");
-  if (posVisual) {
+  gsap.utils.toArray<HTMLElement>(".work-piece").forEach((piece) => {
+    const copy = piece.querySelector<HTMLElement>(".work-copy");
+    const stage = piece.querySelector<HTMLElement>(".work-stage");
     const trigger = ScrollTrigger.create({
-      trigger: posVisual,
-      start: "top bottom",
-      end: "bottom top",
-      scrub: 1.2,
-      onUpdate: (self) => {
-        gsap.set(posVisual, { y: (self.progress - 0.5) * -60 });
-      },
-    });
-    cleanups.push(() => trigger.kill());
-  }
-
-  gsap.utils.toArray<HTMLElement>(".service-card").forEach((card, index) => {
-    const trigger = ScrollTrigger.create({
-      trigger: card,
-      start: "top 90%",
+      trigger: piece,
+      start: "top 82%",
       once: true,
       onEnter: () => {
-        gsap.fromTo(
-          card,
-          { y: 56, opacity: 0, clipPath: "inset(0 0 100% 0)" },
-          {
-            y: 0,
-            opacity: 1,
-            clipPath: "inset(0 0 0% 0)",
-            duration: 1,
-            delay: (index % 2) * 0.1,
-            ease: "power3.out",
-          },
-        );
-      },
-    });
-    cleanups.push(() => trigger.kill());
-  });
-
-  gsap.utils.toArray<HTMLElement>(".case-card").forEach((card, index) => {
-    const trigger = ScrollTrigger.create({
-      trigger: card,
-      start: "top 88%",
-      once: true,
-      onEnter: () => {
-        gsap.fromTo(
-          card,
-          { y: 64, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1.1,
-            delay: index * 0.12,
-            ease: "power3.out",
-          },
-        );
-
-        const metrics = card.querySelectorAll<HTMLElement>(".metric-num span");
-        gsap.fromTo(
-          metrics,
-          { scale: 0.6, opacity: 0 },
-          {
-            scale: 1,
-            opacity: 1,
-            duration: 0.9,
-            stagger: 0.1,
-            ease: "back.out(1.6)",
-            delay: 0.25,
-          },
-        );
+        if (copy) {
+          gsap.fromTo(
+            copy,
+            { y: 36, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.05, ease: "power3.out" },
+          );
+        }
+        if (stage) {
+          gsap.fromTo(
+            stage,
+            { y: 48, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.2, delay: 0.12, ease: "power3.out" },
+          );
+        }
       },
     });
     cleanups.push(() => trigger.kill());

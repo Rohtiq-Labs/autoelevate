@@ -6,6 +6,7 @@ type SiteImageProps = {
   priority?: boolean;
   className?: string;
   sizes?: string;
+  objectFit?: "cover" | "contain";
 };
 
 export const SiteImage = ({
@@ -14,6 +15,7 @@ export const SiteImage = ({
   priority = false,
   className = "object-cover",
   sizes = "(max-width: 640px) 100vw, 50vw",
+  objectFit = "cover",
 }: SiteImageProps): React.ReactElement => (
   <Image
     src={src}
@@ -22,6 +24,6 @@ export const SiteImage = ({
     className={className}
     sizes={sizes}
     priority={priority}
-    style={{ objectFit: "cover" }}
+    style={{ objectFit }}
   />
 );

@@ -1,4 +1,3 @@
-import { SEO_FAQ_ITEMS } from "@/data/seo-faq";
 import { SITE_CONFIG, SITE_ROUTES } from "@/data/site-config";
 
 const absoluteUrl = (path: string): string =>
@@ -105,31 +104,17 @@ export const getServiceSchema = (): Record<string, unknown> => ({
     name: area,
   })),
   serviceType: [
-    "Luxury automotive web design and development",
-    "Auto detailing brand identity",
-    "Conversion funnel and CRM systems",
-    "Automotive marketing creatives and paid media",
-    "Local SEO for PPF and ceramic coating studios",
+    "Automotive websites for detailing, PPF, ceramic coating, window tint and wraps",
+    "Booking and lead systems for automotive businesses",
+    "Google and local search presence for automotive studios",
+    "Social media presence for automotive brands",
+    "Meta advertising for local automotive customer acquisition",
   ],
   offers: {
     "@type": "Offer",
     availability: "https://schema.org/InStock",
-    url: absoluteUrl(SITE_ROUTES.contact),
+    url: absoluteUrl(SITE_ROUTES.services),
   },
-});
-
-export const getFaqSchema = (): Record<string, unknown> => ({
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "@id": `${SITE_CONFIG.url}/#faq`,
-  mainEntity: SEO_FAQ_ITEMS.map((item) => ({
-    "@type": "Question",
-    name: item.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: item.answer,
-    },
-  })),
 });
 
 export const getBreadcrumbSchema = (): Record<string, unknown> => ({
@@ -157,8 +142,8 @@ export const getBreadcrumbSchema = (): Record<string, unknown> => ({
     {
       "@type": "ListItem",
       position: 4,
-      name: "Contact",
-      item: absoluteUrl(SITE_ROUTES.contact),
+      name: "About",
+      item: absoluteUrl(SITE_ROUTES.about),
     },
   ],
 });
@@ -170,7 +155,6 @@ export const getStructuredDataGraph = (): Record<string, unknown> => ({
     getLocalBusinessSchema(),
     getWebsiteSchema(),
     getServiceSchema(),
-    getFaqSchema(),
     getBreadcrumbSchema(),
   ],
 });

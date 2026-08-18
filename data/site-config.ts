@@ -63,8 +63,7 @@ export const SITE_ROUTES = {
   home: "/",
   services: "/#services",
   work: "/#work",
+  testimonials: "/#testimonials",
   about: "/#about",
-  philosophy: "/#philosophy",
-  faq: "/#faq",
-  contact: "/#contact",
+  cta: "/#cta",
 } as const;

@@ -13,6 +13,11 @@ export const SITE_IMAGES = {
     `${BASE}/case-02.jpeg`,
     `${BASE}/case-033.jpeg`,
   ],
+  work: [
+    "/assets/work/prestige-auto-salon.png",
+    "/assets/work/mz-details.png",
+    "/assets/work/831-ricardiopng.png",
+  ],
   services: [
     `${BASE}/service-01.jpeg`,
     `${BASE}/service-02.jpeg`,
@@ -20,7 +25,7 @@ export const SITE_IMAGES = {
     `${BASE}/service-04.jpeg`,
   ],
   positioning: `${BASE}/Agency%20Positioning.jpeg`,
-  contact: `${BASE}/contact.jpeg`,
+  cta: `${BASE}/contact.jpeg`,
   devScene: `${BASE}/development.jpeg`,
   resultsScene: `${BASE}/results.jpeg`,
 } as const;
